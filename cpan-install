@@ -45,7 +45,8 @@ function show-on-fail {
 }
 
 function install-module {
-  for dep in "$@"; do
+  local deps=$(map_module "$1")
+  for dep in $deps; do
     printf "Installing (without testing) $dep ..."
     show-on-fail $INSTALL_CMD $dep
   done
@@ -56,7 +57,11 @@ function dynamic_deps {
   if [ -z "$AUTHOR_TESTING" ] || [ "$AUTHOR_TESTING" -ne 0 ]; then
     AUTHOR_OPTS='--with-develop'
   fi
-  cpanm --showdeps -q . --with-recommends $AUTHOR_OPTS
+  if [[ "$PERL_VERSION" -ge 5008000 ]]; then
+    cpanm --showdeps -q . --with-recommends $AUTHOR_OPTS
+  else
+    $HELPER_ROOT/cpan-prereqs
+  fi
 }
 
 function get_deps {
@@ -82,6 +87,20 @@ function get_deps {
       print $module . ($version ? "~$version" : "") . "\n";
     }
   ' $META_FILE $PHASE $TYPE
+}
+
+function map_module {
+  local MODULE="$1"
+  MODULE="${MODULE/~*/}"
+  if [[ "$PERL_VERSION" -le 5006002 ]]; then
+    case $MODULE in
+      ExtUtils::MakeMaker)
+        echo "MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz"
+        return
+      ;;
+    esac
+  fi
+  echo "$MODULE"
 }
 
 function do-install {

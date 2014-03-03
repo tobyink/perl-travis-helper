@@ -17,6 +17,7 @@ function build-perl {
       return 1
     fi
   fi
+  $HELPER_ROOT/cpan-config
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
