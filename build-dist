@@ -9,8 +9,11 @@ if [ -e 'dist.ini' ]; then
   $HELPER_ROOT/cpan-install $(dzil authordeps | grep -v '^inc::')
   dzil build --in="$BUILD_DIR"
 elif [ -e 'Makefile.PL' ]; then
+  echo '>' $MODERN_PERL Makefile.PL DISTVNAME=$BUILD_DIR
   $MODERN_PERL Makefile.PL DISTVNAME=$BUILD_DIR
+  echo '>' make manifest
   make manifest
+  echo '>' make distdir
   make distdir
 elif [ -e 'Build.PL' ]; then
   $MODERN_PERL Build.PL
