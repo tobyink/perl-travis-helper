@@ -136,7 +136,10 @@ function map_module {
   if [[ "$PERL_VERSION" -le 5006002 ]]; then
     case $MODULE in
       ExtUtils::MakeMaker)
-        PREREQ="MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz ZEFRAM/Carp-1.26.tar.gz FORCE:IPC::Cmd"
+        PREREQ="MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz FORCE:IPC::Cmd"
+      ;;
+      ExtUtils::CBuilder)
+        PREREQ="$MODULE FORCE:Module::Metadata IPC::Cmd FORCE:IPC::Cmd"
       ;;
       *)
         PREREQ="$MODULE"
