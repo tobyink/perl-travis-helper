@@ -59,6 +59,9 @@ function cpan-installer {
     git://*)
       cpan-git-install "$dep"
     ;;
+    FORCE:*)
+      perl -MCPAN -e'force(@ARGV)' install "${dep:6}"
+    ;;
     *)
       perl -MCPAN -e'install(@ARGV)' "$dep"
     ;;
