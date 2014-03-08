@@ -90,17 +90,19 @@ function get_deps {
 }
 
 function map_module {
-  local MODULE="$1"
-  MODULE="${MODULE/~*/}"
+  local PREREQ="$1"
+  local MODULE="${PREREQ/~*/}"
   if [[ "$PERL_VERSION" -le 5006002 ]]; then
     case $MODULE in
       ExtUtils::MakeMaker)
-        echo "MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz"
-        return
+        PREREQ="MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz"
+      ;;
+      *)
+        PREREQ="$MODULE"
       ;;
     esac
   fi
-  echo "$MODULE"
+  echo "$PREREQ"
 }
 
 function do-install {
