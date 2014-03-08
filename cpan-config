@@ -27,4 +27,5 @@ my %config = (
   eval { CPAN::Config->load };
   $CPAN::Config = { %config };
   CPAN::Config->init;
+  CPAN::Config->commit;
 }
