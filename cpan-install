@@ -136,7 +136,7 @@ function map_module {
   if [[ "$PERL_VERSION" -le 5006002 ]]; then
     case $MODULE in
       ExtUtils::MakeMaker)
-        PREREQ="MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz FORCE:Module::Metadata IPC::Cmd FORCE:IPC::Cmd DAGOLDEN/CPAN-Meta-YAML-0.010.tar.gz DAGOLDEN/CPAN-Meta-2.112150.tar.gz"
+        PREREQ="MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz FORCE:Module::Metadata IPC::Cmd FORCE:IPC::Cmd DAGOLDEN/CPAN-Meta-YAML-0.010.tar.gz DAGOLDEN/CPAN-Meta-2.112150.tar.gz LEONT/Module-Build-0.4005.tar.gz"
       ;;
       ExtUtils::CBuilder)
         PREREQ="$MODULE FORCE:Module::Metadata IPC::Cmd FORCE:IPC::Cmd"
