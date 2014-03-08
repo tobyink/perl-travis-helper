@@ -7,7 +7,7 @@ PERL_VERSION="$(perl -e'print $] * 1_000_000')"
 if [[ "$PERL_VERSION" -ge 5008000 ]]; then
   INSTALL_CMD="cpanm --verbose --no-interactive --no-man-pages --notest --skip-satisfied"
 else
-  INSTALL_CMD="perl -MCPAN -e'install(@ARGV)'"
+  INSTALL_CMD="cpan-installer"
 fi
 
 [ -n "$CPAN_MIRROR" ] && export PERL_CPANM_OPT="--mirror $CPAN_MIRROR $PERL_CPANM_OPT"
@@ -42,6 +42,42 @@ function show-on-fail {
     return $?
   fi
   echo ' Done'
+}
+
+function cpan-installer {
+  local dep="$1"
+  case "$dep" in
+    *.git)
+      cpan-git-install "$dep"
+    ;;
+    *.git@*)
+      cpan-git-install "$dep"
+    ;;
+    git+*://*)
+      cpan-git-install "$dep"
+    ;;
+    git://*)
+      cpan-git-install "$dep"
+    ;;
+    *)
+      perl -MCPAN -e'install(@ARGV)' "$dep"
+    ;;
+  esac
+}
+
+function cpan-git-install {
+  local dep="$1"
+  local repo="${dep/@*/}"
+  local branch="${dep/*@/}"
+  if [ "$dep" == "$branch" ]; then
+    branch=''
+  else
+    branch="--branch $branch"
+  fi
+  local clone_dir="$(mktemp -d -t local-lib-XXXXXX)/repo"
+  git clone "$repo" $branch "$clone_dir"
+  cd "$clone_dir"
+  do-install .
 }
 
 function install-module {
@@ -128,6 +164,14 @@ function do-install {
         if [ -n "$COVERAGE" ]; then
           install-module Devel::Cover
           install-module Devel::Cover::Report::Coveralls
+        fi
+      ;;
+      .)
+        do-install --deps
+        if [ -e 'Makefile' ]; then
+          make install
+        elif [ -e 'Build' ]; then
+          ./Build install
         fi
       ;;
       *)
