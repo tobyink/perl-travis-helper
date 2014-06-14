@@ -28,6 +28,7 @@ function auto-install {
 
 if [ -e 'dist.ini' ] && [ ! -z $(grep Dist::Inkt::Profile::TOBYINK dist.ini) ]; then
   echo "Building with Dist::Inkt::Profile::TOBYINK"
+  $HELPER_ROOT/cpan-install TOBYINK/Dist-Inkt-0.018.tar.gz
   $HELPER_ROOT/cpan-install Dist::Inkt::Profile::TOBYINK
   PERL_DIST_INKT_NOTARBALL=1
   PERL_DIST_INKT_KEEPDIR=1
