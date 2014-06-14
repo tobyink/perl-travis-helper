@@ -26,7 +26,15 @@ function auto-install {
   return $status
 }
 
-if [ -e 'dist.ini' ]; then
+if [ -e 'dist.ini' ] && [ ! -z $(grep Dist::Inkt::Profile::TOBYINK dist.ini) ]; then
+  echo "Building with Dist::Inkt::Profile::TOBYINK"
+  $HELPER_ROOT/cpan-install Dist::Inkt::Profile::TOBYINK
+  PERL_DIST_INKT_NOTARBALL=1
+  PERL_DIST_INKT_KEEPDIR=1
+  distinkt-dist
+  DIST_DIR=$(perl -ne 'print grep -d, glob("$1*") if /name\s*=\s*.([\w:]+)./' dist.ini)
+  mv "$DIST_DIR" "$BUILD_DIR"
+elif [ -e 'dist.ini' ]; then
   echo "Building with Dist::Zilla"
   $HELPER_ROOT/cpan-install Dist::Zilla
   AUTHOR_DEPS="$(dzil authordeps --missing | grep -v '^inc::')"
