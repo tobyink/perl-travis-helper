@@ -27,6 +27,7 @@ function auto-install {
 }
 
 if [ -e 'dist.ini' ] && [ ! -z $(grep Dist::Inkt::Profile::TOBYINK dist.ini) ]; then
+  mkdir -p $HOME/perl5/standard-documents
   echo "Building with Dist::Inkt::Profile::TOBYINK"
   $HELPER_ROOT/cpan-install File::chdir
   $HELPER_ROOT/cpan-install Path::FindDev
