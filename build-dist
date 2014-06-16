@@ -26,7 +26,7 @@ function auto-install {
   return $status
 }
 
-if [ -e 'dist.ini' ] && [ ! -z "$DIST_INKT_PROFILE" ]; then
+if [ -e 'dist.ini' ] && [ -n "$DIST_INKT_PROFILE" ]; then
   echo "Building with Dist::Inkt::Profile::TOBYINK"
   $HELPER_ROOT/cpan-install 'http://cpan.metacpan.org/authors/id/T/TO/TOBYINK/Dist-Inkt-0.020.tar.gz'
   $HELPER_ROOT/cpan-install "$DIST_INKT_PROFILE"
