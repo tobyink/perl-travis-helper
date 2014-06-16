@@ -26,16 +26,11 @@ function auto-install {
   return $status
 }
 
-if [ -e 'dist.ini' ] && [ ! -z $(grep Dist::Inkt::Profile::TOBYINK dist.ini) ]; then
+if [ -e 'dist.ini' ] && [ ! -z "$DIST_INKT_PROFILE" ]; then
   echo "Building with Dist::Inkt::Profile::TOBYINK"
-  $HELPER_ROOT/cpan-install 'http://cpan.metacpan.org/authors/id/T/TO/TOBYINK/Dist-Inkt-0.019.tar.gz'
-  $HELPER_ROOT/cpan-install Dist::Inkt::Profile::TOBYINK
-  export PERL_DIST_INKT_NOSIGNATURE=1
-  export PERL_DIST_INKT_NOTARBALL=1
-  export PERL_DIST_INKT_KEEPDIR=1
-  distinkt-dist
-  DIST_DIR=$(perl -ne 'print grep -d, glob("$1*") if /name\s*=\s*.([\w:]+)./' dist.ini)
-  mv "$DIST_DIR" "$BUILD_DIR"
+  $HELPER_ROOT/cpan-install 'http://cpan.metacpan.org/authors/id/T/TO/TOBYINK/Dist-Inkt-0.020.tar.gz'
+  $HELPER_ROOT/cpan-install "$DIST_INKT_PROFILE"
+  distinkt-dist --travis --targetdir="$BUILD_DIR"
 elif [ -e 'dist.ini' ]; then
   echo "Building with Dist::Zilla"
   $HELPER_ROOT/cpan-install Dist::Zilla
