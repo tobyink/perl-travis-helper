@@ -112,6 +112,8 @@ function do-install {
       --coverage)
         if [ "$COVERAGE" -eq 1 ]; then
           install-module IO::Socket::SSL
+          install-module JSON::XS
+          install-module JSON
           install-module Devel::Cover
           install-module Devel::Cover::Report::Coveralls
         fi
