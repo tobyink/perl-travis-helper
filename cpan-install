@@ -94,16 +94,8 @@ function do-install {
   for arg in "$@"; do
     case $arg in
       --toolchain)
-        EUMM_VERSION="$(perl -MExtUtils::MakeMaker -e'print int($ExtUtils::MakeMaker::VERSION * 100)')"
-        if [ "$EUMM_VERSION" -lt 630 ]; then
-          echo "Recent EUMM:"
-          install-module ExtUtils::MakeMaker
-        fi
-        EXPORTER_VERSION="$(perl -MExporter -e'print int($Exporter::VERSION * 100)')"
-        if [ "$EXPORTER_VERSION" -lt 557 ]; then
-          echo "Recent Exporter:"
-          install-module Exporter
-        fi
+        install-module ExtUtils::MakeMaker~6.31
+        install-module Exporter~5.57
       ;;
       --deps)
         echo "Configure prerequisites:"
