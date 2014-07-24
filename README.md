@@ -10,7 +10,7 @@ Example .travis.yml
     perl:
       - "5.8"                     # normal preinstalled perl
       - "5.8.4"                   # installs perl 5.8.4
-      - "5.8.4_thr"               # installs perl 5.8.4 with threading
+      - "5.8.4-thr"               # installs perl 5.8.4 with threading
       - "5.20"                    # installs latest perl 5.20 (if not already available)
       - "blead"                   # installs perl from git
     matrix:
@@ -39,10 +39,36 @@ Description
 -----------
 While Travis-CI provides simple testing with perl or other languages, it has
 several limitations to address.  It only has a limited number of perl versions
-available, and only uses the default build options.  There are also various
-other commonly used functions, like reporting code coverage.  These helpers are
-intended to be an easily reusable set of functions for testing any CPAN style
-distribution.
+available, and only uses the default build options.
+
+These helpers will build perl versions for you if they aren't available.
+Additional helpers will build a dist package using a newer perl than the tests
+are run with, or aid with installing dependencies or reporting code coverage.
+
+The helpers are meant to be usable indivitually, so you can pick only the ones
+needed for your use case.
+
+Perl Building
+-------------
+If the specified perl version is already installed on the Travis testing
+machine, it will be used as is.  Any requested perl version that isn't available
+will be built for you.  If the patch level isn't included in the version, the
+latest in that series will be used.  Additionally, some build flags can be
+specified by adding them as dash separated suffixes (e.g. 5.10.1-thr-mb).
+
+  * thr
+    Builds a perl with thread support.  Controls the ```useithreads``` flag.
+
+  * dbg
+    Builds a debugging perl.  Controls the ```DEBUGGING``` flag.
+
+  * mb
+    Builds a perl with 64-bit and long double support.  Controls the
+    ```usemorebits``` flag.
+
+  * shrplib
+    Builds a shared libperl used by perl.  Needed for some dynamic loading
+    cases.  Controls the ```useshrplib``` flag.
 
 Environment Variables
 ---------------------
@@ -103,6 +129,10 @@ done, or are just set by the commands.
 
 Commands
 --------
+  * init
+
+    Sets up the helper functions, and initializes environment variables.
+
   * build-perl
 
     Builds the requested perl version if needed, and switches to it.
@@ -162,3 +192,11 @@ information.  These can be ignored.  The build will continue, allowing the
 `build-perl` command to build and switch to the requested version.  It is
 recommended to include `perl -V` after `build-perl`, so the build details of
 the perl being used will be included in the build log.
+
+Example Projects
+----------------
+  * [Moo](https://github.com/moose/Moo)
+  * [Moose](https://github.com/moose/Moose)
+  * [Match::Simple](https://github.com/tobyink/p5-match-simple)
+  * [DateTime::Format::MSSQL](https://github.com/frioux/DateTime-Format-MSSQL)
+  * [local::lib](https://github.com/Perl-Toolchain-Gang/local-lib)
