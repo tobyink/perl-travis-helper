@@ -59,9 +59,9 @@ function coverage-report {
   [ "$COVERAGE" -eq 0 ] && return
   local cover_opts
   if perl -mDevel::Cover::Report::Coveralls -e1 2>/dev/null; then
-    cover_opts="$cover_opts $COVERALLS_OPTS -report coveralls"
+    cover_opts="$cover_opts -report coveralls"
   fi
-  cover $cover_opts
+  cover "$@" $cover_opts
 }
 
 function test-dirs {
