@@ -52,14 +52,14 @@ function cpan-install {
 function coverage-setup {
   [ "$COVERAGE" -eq 0 ] && return
   cover -delete -silent
-  export HARNESS_PERL_SWITCHES='-MDevel::Cover=-ignore,^(inc|x?t)/,-blib,0'
+  export HARNESS_PERL_SWITCHES='-MDevel::Cover=-ignore,^x?t/,-blib,0'
 }
 
 function coverage-report {
   [ "$COVERAGE" -eq 0 ] && return
   local cover_opts
   if perl -mDevel::Cover::Report::Coveralls -e1 2>/dev/null; then
-    cover_opts="$cover_opts -report coveralls"
+    cover_opts="$cover_opts $COVERALLS_OPTS -report coveralls"
   fi
   cover $cover_opts
 }
